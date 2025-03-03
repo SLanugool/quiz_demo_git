@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
   <title>Login Page</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     /* Style for the body: Sets the background image, covers the entire view, centers content */
+
     body {
       background-image: url(' IMAGE URL ');
       background-size: cover;
@@ -12,6 +21,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      font-family: "Noto Sans Thai", sans-serif;
     }
 
     /* Style for the container: White background, padding, rounded borders, shadow, and specific width */
@@ -36,6 +46,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <!-- Logo container -->
@@ -59,21 +70,26 @@
     <!-- Scripts for handling login and loading the registration page -->
     <script>
       // Function to validate login credentials
-      function validateLogin() {
-        google.script.run.withSuccessHandler(function(response) {
-          if(response) {
-            // Redirects to the menu page if login is successful
+    function validateLogin() {
+    google.script.run.withSuccessHandler(function(response) {
+        if (response) {
+            // หากเข้าสู่ระบบสำเร็จ ให้โหลดหน้าเมนู
             google.script.run.withSuccessHandler(function(html) {
-              document.open();
-              document.write(html);
-              document.close();
+                document.open();
+                document.write(html);
+                document.close();
             }).getMenuPage();
-          } else {
-            // Shows an alert if credentials are invalid
-            window.alert('Invalid Credentials');
-          }
-        }).checkLogin(document.getElementById('email').value, document.getElementById('pwd').value);
-      }
+        } else {
+            // ใช้ SweetAlert แสดงข้อความเมื่อเข้าสู่ระบบล้มเหลว
+            Swal.fire({
+                title: "เข้าสู่ระบบไม่สำเร็จ",
+                text: "กรุณาตรวจสอบ Password หรือลงทะเบียนเพื่อเข้าสู่ระบบ",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        }
+    }).checkLogin(document.getElementById('email').value, document.getElementById('pwd').value);
+    }
 
       // Function to load the registration page
       function loadRegistration() {
@@ -86,4 +102,5 @@
     </script>
   </div>
 </body>
+
 </html>

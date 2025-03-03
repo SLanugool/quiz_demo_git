@@ -1,0 +1,214 @@
+<script>
+//กำหนดตัวแปร
+const start_btn = document.querySelector(".start_btn button");
+const info_box = document.querySelector(".info_box");
+const exit_btn = info_box.querySelector(".buttons .quit");
+const continue_btn = info_box.querySelector(".buttons .restart");
+const quiz_box = document.querySelector(".quiz_box");
+const result_box = document.querySelector(".result_box");
+const option_list = document.querySelector(".option_list");
+const time_line = document.querySelector("header .time_line");
+const timeText = document.querySelector(".timer .time_left_txt");
+const timeCount = document.querySelector(".timer .timer_sec");
+
+// คำสั่ง ปุ่มเริ่มสอบ
+start_btn.onclick = ()=>{
+    info_box.classList.add("activeInfo"); //แสดงหน้าคำชี้แจงก่อนสอบ
+}
+
+// คำสั่ง ปุ่มจบการสอบ
+exit_btn.onclick = ()=>{
+    info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจงก่อนสอบ
+}
+
+// คำสั่ง ปุ่มข้อต่อไป
+continue_btn.onclick = ()=>{
+    info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจงก่อนสอบ
+    quiz_box.classList.add("activeQuiz"); //แสดงหน้าคำถาม
+    showQuetions(0); //เรียกฟังก์ชั่น showQestions
+    queCounter(1); //ส่งค่า 1 ไปที่ queCounter
+    startTimer(15); //เรียกฟังก์ชั่น startTimer
+    startTimerLine(0); //เรียกฟังก์ชั่น startTimerLine
+}
+
+let timeValue =  15;
+let que_count = 0;
+let que_numb = 1;
+let userScore = 0;
+let counter;
+let counterLine;
+let widthValue = 0;
+
+const restart_quiz = result_box.querySelector(".buttons .restart");
+const quit_quiz = result_box.querySelector(".buttons .quit");
+
+// คำสั่ง ปุ่มเริ่มสอบใหม่
+restart_quiz.onclick = ()=>{
+    quiz_box.classList.add("activeQuiz"); //แสดงหน้าคำถาม
+    result_box.classList.remove("activeResult"); //ซ่อนหน้ารายงานผลสอบ
+    timeValue = 15; 
+    que_count = 0;
+    que_numb = 1;
+    userScore = 0;
+    widthValue = 0;
+    showQuetions(que_count); //เรียกฟังก์ชั่น showQestions
+    queCounter(que_numb); //ส่งค่า que_numb ไปที่ queCounter
+    clearInterval(counter); //เคลียร์ counter
+    clearInterval(counterLine); //เคลียร์ counterLine
+    startTimer(timeValue); //เรียกฟังก์ชั่น startTimer
+    startTimerLine(widthValue); //เรียกฟังก์ชั่น startTimerLine
+    timeText.textContent = "เหลือเวลา"; //แสดงข้อความ เวลาที่เหลือ
+    next_btn.classList.remove("show"); //ซ่อนปุ่ม ข้อถัดไป
+}
+
+// คำสั่ง ปุ่มออกจากการสอบ
+quit_quiz.onclick = ()=>{
+    window.open("xxx",'_top');
+}
+
+const next_btn = document.querySelector("footer .next_btn");
+const bottom_ques_counter = document.querySelector("footer .total_que");
+
+// คำสั่ง ปุ่ม ข้อถัดไป
+next_btn.onclick = ()=>{
+    if(que_count < questions.length - 1){ //ถ้าจำนวนคำถาม น้อยกว่าคำถามทั้งหมด
+        que_count++; //เพิ่มจำนวนนับ
+        que_numb++; //เพิ่มค่า que_numb
+        showQuetions(que_count); //เรียกฟังก์ชั่น showQestions
+        queCounter(que_numb); //ส่งค่า que_numb ไปให้ queCounter
+        clearInterval(counter); //เคลียร์ counter
+        clearInterval(counterLine); //เคลียร์ counterLine
+        startTimer(timeValue); //เรียกฟังก์ชั่น startTimer
+        startTimerLine(widthValue); //เรียกฟังก์ชั่น startTimerLine
+        timeText.textContent = "เหลือเวลา"; //แสดงข้อความ เวลาที่เหลือ
+        next_btn.classList.remove("show"); //ซ่อนปุ่ม ข้อต่อไป
+    }else{
+        clearInterval(counter); //เคลียร์ counter
+        clearInterval(counterLine); //เคลียร์ counterLine
+        showResult(); //เรียกฟังก์ชั่น  showResult
+    }
+}
+
+// ดึงคำถาม และตัวเลือกตอบจากอะเรย์
+function showQuetions(main){
+    const que_text = document.querySelector(".que_text");
+
+    //แสดงคำถามและตัวเลือก
+    let que_tag = '<span>'+ questions[main].numb + ". " + questions[main].question +'</span>';
+    let option_tag = '<div class="option"><span>'+ questions[main].options[0] +'</span></div>'
+    + '<div class="option"><span>'+ questions[main].options[1] +'</span></div>'
+    + '<div class="option"><span>'+ questions[main].options[2] +'</span></div>'
+    + '<div class="option"><span>'+ questions[main].options[3] +'</span></div>';
+    que_text.innerHTML = que_tag;
+    option_list.innerHTML = option_tag;
+    
+    const option = option_list.querySelectorAll(".option");
+
+    // กำหนด onclick ให้กับตัวเลือก
+    for(i=0; i < option.length; i++){
+        option[i].setAttribute("onclick", "optionSelected(this)");
+    }
+}
+// ใส่ไอคอน
+let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
+let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
+
+//ถ้าผู้สอบ คลิกตอบ
+function optionSelected(answer){
+    clearInterval(counter); //เคลียร์ counter
+    clearInterval(counterLine); //เคลียร์ counterLine
+    let userAns = answer.textContent; //เก็บค่าที่ผู้สอบเลือก
+    let correcAns = questions[que_count].answer; //ดึงคำตอบที่ถูกต้องจากอะเรย์
+    const allOptions = option_list.children.length;
+    
+    if(userAns == correcAns){ //ถ้าเลือกตรงกับคำตอบที่เฉลย
+        userScore += 1; //เพิ่มคะแนนให้ 1 คะแนน
+        answer.classList.add("correct"); //แสดงแถบสีเขียว
+        answer.insertAdjacentHTML("beforeend", tickIconTag); //แสดงเครื่องหมายถูก
+        console.log("Correct Answer");
+        console.log("Your correct answers = " + userScore);
+    }else{
+        answer.classList.add("incorrect"); //แสดงแถบสีแดง
+        answer.insertAdjacentHTML("beforeend", crossIconTag); //แสดงเครื่องหมายผิด
+        console.log("Wrong Answer");
+
+        for(i=0; i < allOptions; i++){
+            if(option_list.children[i].textContent == correcAns){ //ถ้าคำตอบที่เลือกตรงกับที่เฉลย 
+                option_list.children[i].setAttribute("class", "option correct"); //ใส่แถบสีเขียวไปที่ตัวเลือกนั้น
+                option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); //ใส่เครื่องหมายถูกไปที่ตัวเลือกนั้น
+                console.log("Auto selected correct answer.");
+            }
+        }
+    }
+    for(i=0; i < allOptions; i++){
+        option_list.children[i].classList.add("disabled"); //กำหนดให้คลิกตอบได้ครั้งเดียว
+    }
+    next_btn.classList.add("show"); //แสดงปุ่ม ข้อถัดไป
+}
+
+function showResult(){
+    info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจง
+    quiz_box.classList.remove("activeQuiz"); //ซ่อนหน้าคำถาม
+    result_box.classList.add("activeResult"); //แสดงหน้ารายงานผลการสอบ
+    const scoreText = result_box.querySelector(".score_text");
+    if (userScore > 3){ // ถ้าทำคะแนนได้มากกว่า 3
+        //แสดงข้อความ
+        let scoreTag = '<span>ยอดเยี่ยม! 🎉 คุณทำได้ <p>'+ userScore +'</p>/<p>'+ questions.length +' คะแนน</p></span>';
+        scoreText.innerHTML = scoreTag;
+    }
+    else if(userScore > 1){ // ถ้าทำคะแนนสอบได้มากกว่า 1
+        let scoreTag = '<span>เก่งมาก 😎 คุณทำได้ <p>'+ userScore +'</p>/<p>'+ questions.length +' คะแนน</p></span>';
+        scoreText.innerHTML = scoreTag;
+    }
+    else{ // ถ้าทำคะแนนสอบได้ 0
+        let scoreTag = '<span>เสียใจด้วย 😐 คุณทำได้ <p>'+ userScore +'</p>/<p>'+ questions.length +' คะแนน</p></span>';
+        scoreText.innerHTML = scoreTag;
+    }
+}
+
+function startTimer(time){
+    counter = setInterval(timer, 1000);
+    function timer(){
+        timeCount.textContent = time;
+        time--; 
+        if(time < 9){ 
+            let addZero = timeCount.textContent; 
+            timeCount.textContent = "0" + addZero;
+        }
+        if(time < 0){
+            clearInterval(counter); //เคลียร์ counter
+            timeText.textContent = "หมดเวลา"; //หมดเวลาแล้ว
+            const allOptions = option_list.children.length; //ดึงทุกค่าจากตัวเลือก
+            let correcAns = questions[que_count].answer; //ดึงเฉลยจากอะเรย์
+            for(i=0; i < allOptions; i++){
+                if(option_list.children[i].textContent == correcAns){ //ถ้าตอบตรงกับเฉลย
+                    option_list.children[i].setAttribute("class", "option correct"); //แสดงแถบสีเขียวที่ตัวเลือกนั้น
+                    option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); //แสดงเครื่องหมายถูก
+                    console.log("Time Off: Auto selected correct answer.");
+                }
+            }
+            for(i=0; i < allOptions; i++){
+                option_list.children[i].classList.add("disabled"); //กำหนดให้คลิกตอบได้เพียงครั้งเดียว
+            }
+            next_btn.classList.add("show"); //แสดงปุ่ม ข้อถัดไป
+        }
+    }
+}
+
+function startTimerLine(time){
+    counterLine = setInterval(timer, 29);
+    function timer(){
+        time += 1; //เพิ่มค่าวลาทีละ 1
+        time_line.style.width = time + "px"; //เพิ่มขนาดความกว้างของเส้นเวลา
+        if(time > 549){ //ถ้าค่าเวลาเพิ่มขึ้นมากกว่า 549
+            clearInterval(counterLine); //เเคลียร์ counterLine
+        }
+    }
+}
+
+function queCounter(main){
+    //แสดงข้อที่ / จำนวนทั้งหมด
+    let totalQueCounTag = '<span><p>ข้อที่ '+ main +'</p> / <p>'+ questions.length +'</p></span>';
+    bottom_ques_counter.innerHTML = totalQueCounTag;
+}
+</script>
