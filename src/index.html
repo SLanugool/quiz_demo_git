@@ -144,12 +144,12 @@
             <form control="" class="form-group" id="login-form"
               onkeydown="if(event.key === 'Enter'){ event.preventDefault(); validateLogin(); }">
               <div class="row">
-                <input type="email" name="email" id="email" class="form__input" placeholder="Username(Email)">
+                <input type="email" name="email" id="email" class="form__input" placeholder="Username(Email)" required>
               </div>
               <div class="row">
                 <!-- <span class="fa fa-lock"></span> -->
                 <input type="password" name="password" id="pwd" class="form__input"
-                                    placeholder="Password">
+                                    placeholder="Password" required>
               </div>
               <div class="row">
                 <input type="button" value="เข้าสู่ระบบ" class="btn" onclick="validateLogin()">
@@ -167,6 +167,13 @@
             function validateLogin() {
                 google.script.run.withSuccessHandler(function (response) {
                     if (response) {
+                      Swal.fire({
+                        title: 'กำลังเข้าสู่ระบบ...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                      Swal.showLoading();
+                        }
+                  });
                         // หากเข้าสู่ระบบสำเร็จ ให้โหลดหน้าเมนู
                         google.script.run.withSuccessHandler(function (html) {
                             document.open();
@@ -187,12 +194,25 @@
     
             // Function to load the registration page
             function loadRegistration() {
-                google.script.run.withSuccessHandler(function (html) {
-                    document.open();
-                    document.write(html);
-                    document.close();
-                }).getRegistrationPage();
-            }
+  // แสดง Loading overlay ด้วย SweetAlert
+  Swal.fire({
+    title: 'กำลังโหลด...',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+  
+  // เรียกใช้งาน getRegistrationPage และรอผลลัพธ์
+  google.script.run.withSuccessHandler(function (html) {
+    // ปิด Loading overlay เมื่อได้ผลลัพธ์
+    Swal.close();
+    document.open();
+    document.write(html);
+    document.close();
+  }).getRegistrationPage();
+}
+
     </script>
   </div>
 </body>

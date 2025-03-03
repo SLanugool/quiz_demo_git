@@ -2,741 +2,776 @@
 <html lang="th">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Awesome Quiz App | CodingNepal</title>
-  <!-- <link rel="stylesheet" href="style.css"> -->
-  <!-- <?!= include('style') ?> -->
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awesome Quiz App | CodingNepal</title>
+    <!-- FontAweome CDN Link for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <?!= include('style') ?> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Noto Sans Thai", sans-serif;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Noto Sans Thai", sans-serif;
+        }
 
-    body {
-      background: #007bff;
-      font-family: "Noto Sans Thai", sans-serif;
-    }
+        body {
+            background: #007bff;
+            font-family: "Noto Sans Thai", sans-serif;
+        }
 
-    ::selection {
-      color: #fff;
-      background: #007bff;
-    }
+        ::selection {
+            color: #fff;
+            background: #007bff;
+        }
 
-    .start_btn,
-    .info_box,
-    .quiz_box,
-    .result_box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
-        0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
+        .start_btn,
+        .info_box,
+        .quiz_box,
+        .result_box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
 
-    .info_box.activeInfo,
-    .quiz_box.activeQuiz,
-    .result_box.activeResult {
-      opacity: 1;
-      z-index: 5;
-      pointer-events: auto;
-      transform: translate(-50%, -50%) scale(1);
-    }
+        .info_box.activeInfo,
+        .quiz_box.activeQuiz,
+        .result_box.activeResult {
+            opacity: 1;
+            z-index: 5;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
 
-    .start_btn button {
-      font-size: 25px;
-      font-weight: 500;
-      color: #007bff;
-      padding: 15px 30px;
-      outline: none;
-      border: none;
-      border-radius: 5px;
-      background: #fff;
-      cursor: pointer;
-    }
+        .start_btn button {
+            font-size: 25px;
+            font-weight: 500;
+            color: #007bff;
+            padding: 15px 30px;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            background: #fff;
+            cursor: pointer;
+        }
 
-    .info_box {
-      width: 540px;
-      background: #fff;
-      border-radius: 5px;
-      transform: translate(-50%, -50%) scale(0.9);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
+        .info_box {
+            width: 540px;
+            background: #fff;
+            border-radius: 5px;
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
 
-    .info_box .info-title {
-      height: 60px;
-      width: 100%;
-      border-bottom: 1px solid lightgrey;
-      display: flex;
-      align-items: center;
-      padding: 0 30px;
-      border-radius: 5px 5px 0 0;
-      font-size: 20px;
-      font-weight: 600;
-    }
+        .info_box .info-title {
+            height: 60px;
+            width: 100%;
+            border-bottom: 1px solid lightgrey;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            border-radius: 5px 5px 0 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
 
-    .info_box .info-list {
-      padding: 15px 30px;
-    }
+        .info_box .info-list {
+            padding: 15px 30px;
+        }
 
-    .info_box .info-list .info {
-      margin: 5px 0;
-      font-size: 17px;
-    }
+        .info_box .info-list .info {
+            margin: 5px 0;
+            font-size: 17px;
+        }
 
-    .info_box .info-list .info span {
-      font-weight: 600;
-      color: #007bff;
-    }
+        .info_box .info-list .info span {
+            font-weight: 600;
+            color: #007bff;
+        }
 
-    .info_box .buttons {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 30px;
-      border-top: 1px solid lightgrey;
-    }
+        .info_box .buttons {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 30px;
+            border-top: 1px solid lightgrey;
+        }
 
-    .info_box .buttons button {
-      margin: 0 5px;
-      height: 40px;
-      width: 100px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      outline: none;
-      border-radius: 5px;
-      border: 1px solid #007bff;
-      transition: all 0.3s ease;
-    }
+        .info_box .buttons button {
+            margin: 0 5px;
+            height: 40px;
+            width: 100px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            border: 1px solid #007bff;
+            transition: all 0.3s ease;
+        }
 
-    .quiz_box {
-      width: 550px;
-      background: #fff;
-      border-radius: 5px;
-      transform: translate(-50%, -50%) scale(0.9);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
+        .quiz_box {
+            width: 550px;
+            background: #fff;
+            border-radius: 5px;
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
 
-    .quiz_box header {
-      position: relative;
-      z-index: 2;
-      height: 70px;
-      padding: 0 30px;
-      background: #fff;
-      border-radius: 5px 5px 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.1);
-    }
+        .quiz_box header {
+            position: relative;
+            z-index: 2;
+            height: 70px;
+            padding: 0 30px;
+            background: #fff;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.1);
+        }
 
-    .quiz_box header .title {
-      font-size: 20px;
-      font-weight: 600;
-    }
+        .quiz_box header .title {
+            font-size: 20px;
+            font-weight: 600;
+        }
 
-    .quiz_box header .timer {
-      color: #004085;
-      background: #cce5ff;
-      border: 1px solid #b8daff;
-      height: 45px;
-      padding: 0 8px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 145px;
-    }
+        .quiz_box header .timer {
+            color: #004085;
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            height: 45px;
+            padding: 0 8px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 145px;
+        }
 
-    .quiz_box header .timer .time_left_txt {
-      font-weight: 400;
-      font-size: 17px;
-      user-select: none;
-    }
+        .quiz_box header .timer .time_left_txt {
+            font-weight: 400;
+            font-size: 17px;
+            user-select: none;
+        }
 
-    .quiz_box header .timer .timer_sec {
-      font-size: 18px;
-      font-weight: 500;
-      height: 30px;
-      width: 45px;
-      color: #fff;
-      border-radius: 5px;
-      line-height: 30px;
-      text-align: center;
-      background: #343a40;
-      border: 1px solid #343a40;
-      user-select: none;
-    }
+        .quiz_box header .timer .timer_sec {
+            font-size: 18px;
+            font-weight: 500;
+            height: 30px;
+            width: 45px;
+            color: #fff;
+            border-radius: 5px;
+            line-height: 30px;
+            text-align: center;
+            background: #343a40;
+            border: 1px solid #343a40;
+            user-select: none;
+        }
 
-    .quiz_box header .time_line {
-      position: absolute;
-      bottom: 0px;
-      left: 0px;
-      height: 3px;
-      background: #007bff;
-    }
+        .quiz_box header .time_line {
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            height: 3px;
+            background: #007bff;
+        }
 
-    section {
-      padding: 25px 30px 20px 30px;
-      background: #fff;
-    }
+        section {
+            padding: 25px 30px 20px 30px;
+            background: #fff;
+        }
 
-    section .que_text {
-      font-size: 25px;
-      font-weight: 600;
-    }
+        section .que_text {
+            font-size: 25px;
+            font-weight: 600;
+        }
 
-    section .option_list {
-      padding: 20px 0px;
-      display: block;
-    }
+        section .option_list {
+            padding: 20px 0px;
+            display: block;
+        }
 
-    section .option_list .option {
-      background: aliceblue;
-      border: 1px solid #84c5fe;
-      border-radius: 5px;
-      padding: 8px 15px;
-      font-size: 17px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+        section .option_list .option {
+            background: aliceblue;
+            border: 1px solid #84c5fe;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 17px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-    section .option_list .option:last-child {
-      margin-bottom: 0px;
-    }
+        section .option_list .option:last-child {
+            margin-bottom: 0px;
+        }
 
-    section .option_list .option:hover {
-      color: #004085;
-      background: #cce5ff;
-      border: 1px solid #b8daff;
-    }
+        section .option_list .option:hover {
+            color: #004085;
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+        }
 
-    section .option_list .option.correct {
-      color: #155724;
-      background: #d4edda;
-      border: 1px solid #c3e6cb;
-    }
+        section .option_list .option.correct {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
 
-    section .option_list .option.incorrect {
-      color: #721c24;
-      background: #f8d7da;
-      border: 1px solid #f5c6cb;
-    }
+        section .option_list .option.incorrect {
+            color: #721c24;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
 
-    section .option_list .option.disabled {
-      pointer-events: none;
-    }
+        section .option_list .option.disabled {
+            pointer-events: none;
+        }
 
-    section .option_list .option .icon {
-      height: 26px;
-      width: 26px;
-      border: 2px solid transparent;
-      border-radius: 50%;
-      text-align: center;
-      font-size: 13px;
-      pointer-events: none;
-      transition: all 0.3s ease;
-      line-height: 24px;
-    }
+        section .option_list .option .icon {
+            height: 26px;
+            width: 26px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 13px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            line-height: 24px;
+        }
 
-    .option_list .option .icon.tick {
-      color: #23903c;
-      border-color: #23903c;
-      background: #d4edda;
-    }
+        .option_list .option .icon.tick {
+            color: #23903c;
+            border-color: #23903c;
+            background: #d4edda;
+        }
 
-    .option_list .option .icon.cross {
-      color: #a42834;
-      background: #f8d7da;
-      border-color: #a42834;
-    }
+        .option_list .option .icon.cross {
+            color: #a42834;
+            background: #f8d7da;
+            border-color: #a42834;
+        }
 
-    footer {
-      height: 60px;
-      padding: 0 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid lightgrey;
-    }
+        footer {
+            height: 60px;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid lightgrey;
+        }
 
-    footer .total_que span {
-      display: flex;
-      user-select: none;
-    }
+        footer .total_que span {
+            display: flex;
+            user-select: none;
+        }
 
-    footer .total_que span p {
-      font-weight: 500;
-      padding: 0 5px;
-    }
+        footer .total_que span p {
+            font-weight: 500;
+            padding: 0 5px;
+        }
 
-    footer .total_que span p:first-child {
-      padding-left: 0px;
-    }
+        footer .total_que span p:first-child {
+            padding-left: 0px;
+        }
 
-    footer button {
-      height: 40px;
-      padding: 0 13px;
-      font-size: 18px;
-      font-weight: 400;
-      cursor: pointer;
-      border: none;
-      outline: none;
-      color: #fff;
-      border-radius: 5px;
-      background: #007bff;
-      border: 1px solid #007bff;
-      line-height: 10px;
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.95);
-      transition: all 0.3s ease;
-    }
+        footer button {
+            height: 40px;
+            padding: 0 13px;
+            font-size: 18px;
+            font-weight: 400;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            color: #fff;
+            border-radius: 5px;
+            background: #007bff;
+            border: 1px solid #007bff;
+            line-height: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
 
-    footer button:hover {
-      background: #0263ca;
-    }
+        footer button:hover {
+            background: #0263ca;
+        }
 
-    footer button.show {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1);
-    }
+        footer button.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
 
-    .result_box {
-      background: #fff;
-      border-radius: 5px;
-      display: flex;
-      padding: 25px 30px;
-      width: 450px;
-      align-items: center;
-      flex-direction: column;
-      justify-content: center;
-      transform: translate(-50%, -50%) scale(0.9);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
+        .result_box {
+            background: #fff;
+            border-radius: 5px;
+            display: flex;
+            padding: 25px 30px;
+            width: 450px;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
 
-    .result_box .icon {
-      font-size: 100px;
-      color: #007bff;
-      margin-bottom: 10px;
-    }
+        .result_box .icon {
+            font-size: 100px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
 
-    .result_box .complete_text {
-      font-size: 20px;
-      font-weight: 500;
-    }
+        .result_box .complete_text {
+            font-size: 20px;
+            font-weight: 500;
+        }
 
-    .result_box .score_text span {
-      display: flex;
-      margin: 10px 0;
-      font-size: 18px;
-      font-weight: 500;
-    }
+        .result_box .score_text span {
+            display: flex;
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
 
-    .result_box .score_text span p {
-      padding: 0 4px;
-      font-weight: 600;
-    }
+        .result_box .score_text span p {
+            padding: 0 4px;
+            font-weight: 600;
+        }
 
-    .result_box .buttons {
-      display: flex;
-      margin: 20px 0;
-    }
+        .result_box .buttons {
+            display: flex;
+            margin: 20px 0;
+        }
 
-    .result_box .buttons button {
-      margin: 0 10px;
-      height: 45px;
-      padding: 0 20px;
-      font-size: 18px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      outline: none;
-      border-radius: 5px;
-      border: 1px solid #007bff;
-      transition: all 0.3s ease;
-    }
+        .result_box .buttons button {
+            margin: 0 10px;
+            height: 45px;
+            padding: 0 20px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            border: 1px solid #007bff;
+            transition: all 0.3s ease;
+        }
 
-    .buttons button.restart {
-      color: #fff;
-      background: #007bff;
-    }
+        .buttons button.restart {
+            color: #fff;
+            background: #007bff;
+        }
 
-    .buttons button.restart:hover {
-      background: #0263ca;
-    }
+        .buttons button.restart:hover {
+            background: #0263ca;
+        }
 
-    .buttons button.quit {
-      color: #007bff;
-      background: #fff;
-    }
+        .buttons button.quit {
+            color: #007bff;
+            background: #fff;
+        }
 
-    .buttons button.quit:hover {
-      color: #fff;
-      background: #007bff;
-    }
-  </style>
-  <!-- FontAweome CDN Link for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        .buttons button.quit:hover {
+            color: #fff;
+            background: #007bff;
+        }
+        @media screen and (max-width: 550px){
+            .info_box{
+                width: 90%;
+            }
+            .quiz_box{
+                width: 90%;
+            }
+            .result_box {
+                width:90%;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <!-- start Quiz button -->
-  <div class="start_btn"><button>เริ่มทำแบบทดสอบ</button></div>
+    <!-- start Quiz button -->
+    <div class="start_btn"><button>เริ่มทำแบบทดสอบ</button></div>
 
-  <!-- หน้าคำชี้แจง -->
-  <div class="info_box">
-    <div class="info-title"><span>คำชี้แจงในการทำแบบทดสอบ</span></div>
-    <div class="info-list">
-      <div class="info">1. คุณมีเวลาทำแบบทดสอบ <span>15 วินาที</span> ต่อ 1 ข้อ.</div>
-      <div class="info">2. ถ้าเลือกตอบตัวเลือกใดแล้วไม่สามารถเปลี่ยนตอบตัวเลือกใหม่ได้.</div>
-      <div class="info">3. เมื่อสอบเสร็จแล้วจะไม่สามารถเลือกตอบใหม่ได้อีก.</div>
-      <div class="info">4. คุณต้องทำข้อสอบให้ครบทุกข้อ.</div>
-      <div class="info">5. เมื่อตอบถูกจะได้คะแนนข้อละ 1 คะแนน.</div>
+    <!-- หน้าคำชี้แจง -->
+    <div class="info_box">
+        <div class="info-title"><span>คำชี้แจงในการทำแบบทดสอบ</span></div>
+        <div class="info-list">
+            <div class="info">1. น้องมีเวลาทำแบบทดสอบ ข้อละ 2 นาที <span>( 120 วินาที )</span></div>
+            <div class="info">2. ข้อสอบมีทั้งหมด <span>5 ข้อ</span></div>
+            <div class="info">3. เมื่อตอบถูกจะได้คะแนนข้อละ 1 คะแนน</div>
+            <div class="info">4. เมื่อตอบแล้วจะไม่สามารถเลือกตอบใหม่ได้อีก</div>
+            <div class="info">5. <span>เตรียมกระดาษทด ปากกา ดินสอ ยางลบ ให้พร้อม</span></div>
+        </div>
+        <div class="buttons">
+            <button class="quit">ออก</button>
+            <button class="restart">เริ่มสอบเลย</button>
+        </div>
     </div>
-    <div class="buttons">
-      <button class="quit">ออก</button>
-      <button class="restart">เริ่มสอบ</button>
+
+    <!-- หน้าคำถาม -->
+    <div class="quiz_box">
+        <header>
+            <div class="title">MOCK EXAM TU</div>
+            <div class="timer">
+                <div class="time_left_txt">เหลือเวลา</div>
+                <div class="timer_sec">120</div>
+            </div>
+            <div class="time_line"></div>
+        </header>
+        <section>
+            <div class="que_text">
+                <!-- แทรกคำถามที่นี่ -->
+            </div>
+            <div class="option_list">
+                <!-- แทรกตัวเลือกที่นี่ -->
+            </div>
+        </section>
+
+        <!-- ส่วนล่างของหน้าคำถาม -->
+        <footer>
+            <div class="total_que">
+                <!-- แทรกข้อที่ และจำนวนคำถามทั้งหมด -->
+            </div>
+            <button class="next_btn">ข้อถัดไป</button>
+        </footer>
     </div>
-  </div>
 
-  <!-- หน้าคำถาม -->
-  <div class="quiz_box">
-    <header>
-      <div class="title">แบบทดสอบก่อนเรียน</div>
-      <div class="timer">
-        <div class="time_left_txt">เหลือเวลา</div>
-        <div class="timer_sec">120</div>
-      </div>
-      <div class="time_line"></div>
-    </header>
-    <section>
-      <div class="que_text">
-        <!-- แทรกคำถามที่นี่ -->
-      </div>
-      <div class="option_list">
-        <!-- แทรกตัวเลือกที่นี่ -->
-      </div>
-    </section>
-
-    <!-- ส่วนล่างของหน้าคำถาม -->
-    <footer>
-      <div class="total_que">
-        <!-- แทรกข้อที่ และจำนวนคำถามทั้งหมด -->
-      </div>
-      <button class="next_btn">ข้อถัดไป</button>
-    </footer>
-  </div>
-
-  <!-- หน้ารายงานผลการสอบ -->
-  <div class="result_box">
-    <div class="icon">
-      <i class="fas fa-crown"></i>
+    <!-- หน้ารายงานผลการสอบ -->
+    <div class="result_box">
+        <div class="icon">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div class="complete_text">น้องทำข้อสอบครบทุกข้อแล้ว!</div>
+        <div class="score_text">
+            <!-- แทรกรายงานผลการสอบ+คะแนนที่นี่ -->
+        </div>
+        <div class="buttons">
+            <button class="restart">เริ่มสอบใหม่</button>
+            <button class="quit">จบการสอบ</button>
+        </div>
     </div>
-    <div class="complete_text">คุณทำข้อสอบครบทุกข้อแล้ว!</div>
-    <div class="score_text">
-      <!-- แทรกรายงานผลการสอบ+คะแนนที่นี่ -->
-    </div>
-    <div class="buttons">
-      <button class="restart">เริ่มสอบใหม่</button>
-      <button class="quit">จบการสอบ</button>
-    </div>
-  </div>
-  <!-- <?!= include('questions') ?> -->
-  <script>
-    // สร้างคำถาม ตัวเลือก และเฉลยแต่ละข้อ
-let questions = [
-    {
-    numb: 1,
-    question: "ข้อใดเป็นฮาร์ดแวร์ของคอมพิวเตอร์?",
-    answer: "keyboard",
-    options: [
-      "word",
-      "keyboard",
-      "powerpoint",
-      "excel"
-    ]
-  },
-    {
-    numb: 2,
-    question: "ข้อใดเป็นโปรแกรมระบบปฏิบัติการ?",
-    answer: "windows",
-    options: [
-      "powerpoint",
-      "photoshop",
-      "illustrator",
-      "windows"
-    ]
-  },
-    {
-    numb: 3,
-    question: "RAM เป็นฮาร์ดแวร์ในหน่วยใด?",
-    answer: "หน่วยความจำชั่วคราว",
-    options: [
-      "หน่วยความจำชั่วคราว",
-      "หน่วยจัดเก็บ",
-      "หน่วยประมวลผล",
-      "หน่วยส่งออก"
-    ]
-  },
-    {
-    numb: 4,
-    question: "ข้อใดเป็นอุปกรณ์ในหน่วยส่งออก?",
-    answer: "เครื่องพิมพ์",
-    options: [
-      "เมาส์",
-      "แป้นพิมพ์",
-      "เครื่องพิมพ์",
-      "สแกนเนอร์"
-    ]
-  },
-    {
-    numb: 5,
-    question: "ข้อใดกล่าวถึง CPU ได้ถูกต้องที่สุด?",
-    answer: "หน่วยประมวลผลกลาง",
-    options: [
-      "หน่วยความจำ",
-      "หน่วยประมวลผลกลาง",
-      "หน่วยส่งออก",
-      "หน่วยรับเข้า"
-    ]
-  }
-];
-  </script>
-  <!-- <?!= include('script') ?> -->
-  <script>
-    //กำหนดตัวแปร
-const start_btn = document.querySelector(".start_btn button");
-const info_box = document.querySelector(".info_box");
-const exit_btn = info_box.querySelector(".buttons .quit");
-const continue_btn = info_box.querySelector(".buttons .restart");
-const quiz_box = document.querySelector(".quiz_box");
-const result_box = document.querySelector(".result_box");
-const option_list = document.querySelector(".option_list");
-const time_line = document.querySelector("header .time_line");
-const timeText = document.querySelector(".timer .time_left_txt");
-const timeCount = document.querySelector(".timer .timer_sec");
+    <!-- <?!= include('questions') ?> -->
+    <script>
+        // สร้างคำถาม ตัวเลือก และเฉลยแต่ละข้อ
+        let questions = [
+            {
+                numb: 1,
+                question: "https://drive.google.com/file/d/1mAlJFLPZ5mLildkWAnJ8duZv0V6_llxx/view?usp=drive_link",
+                answer: "198",
+                options: [
+                    "168",
+                    "198",
+                    "208",
+                    "216"
+                ]
+            },
+            {
+                numb: 2,
+                question: "https://drive.google.com/file/d/1TtEOhzL5Fy5WKtxratLI8M0OzhToV3ls/view?usp=drive_link",
+                answer: "5/2",
+                options: [
+                    "3/2",
+                    "5/2",
+                    "3",
+                    "5"
+                ]
+            },
+            {
+                numb: 3,
+                question: "https://drive.google.com/file/d/17eiH3SNOZ82A47tnazNI_mtBTjCSs7HW/view?usp=drive_link",
+                answer: "13",
+                options: [
+                    "5",
+                    "7",
+                    "11",
+                    "13"
+                ]
+            },
+            {
+                numb: 4,
+                question: "https://drive.google.com/file/d/1V3TiWaJ0X-KIuiyOoMOD9FkhkvxK3uc9/view?usp=drive_link",
+                answer: "5",
+                options: [
+                    "2",
+                    "5",
+                    "7",
+                    "11"
+                ]
+            },
+            {
+                numb: 5,
+                question: "https://drive.google.com/file/d/1Xf8CcMnyLcvBvLmvqCjorDBNT2KIa3sc/view?usp=drive_link",
+                answer: "2",
+                options: [
+                    "1 ",
+                    "1.5",
+                    "2",
+                    "2.5"
+                ]
+            }
+        ];
+    </script>
+    <!-- <?!= include('script') ?> -->
+    <script>
+        //กำหนดตัวแปร
+        const start_btn = document.querySelector(".start_btn button");
+        const info_box = document.querySelector(".info_box");
+        const exit_btn = info_box.querySelector(".buttons .quit");
+        const continue_btn = info_box.querySelector(".buttons .restart");
+        const quiz_box = document.querySelector(".quiz_box");
+        const result_box = document.querySelector(".result_box");
+        const option_list = document.querySelector(".option_list");
+        const time_line = document.querySelector("header .time_line");
+        const timeText = document.querySelector(".timer .time_left_txt");
+        const timeCount = document.querySelector(".timer .timer_sec");
 
-// คำสั่ง ปุ่มเริ่มสอบ
-start_btn.onclick = ()=>{
-    info_box.classList.add("activeInfo"); //แสดงหน้าคำชี้แจงก่อนสอบ
-}
+        // คำสั่ง ปุ่มเริ่มสอบ
+        start_btn.onclick = () => {
+            info_box.classList.add("activeInfo"); //แสดงหน้าคำชี้แจงก่อนสอบ
+        }
 
-// คำสั่ง ปุ่มจบการสอบ
-exit_btn.onclick = ()=>{
-    info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจงก่อนสอบ
-}
+        // คำสั่ง ปุ่มจบการสอบ
+        exit_btn.onclick = () => {
+            info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจงก่อนสอบ
+        }
 
-// คำสั่ง ปุ่มข้อต่อไป
-continue_btn.onclick = ()=>{
-    info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจงก่อนสอบ
-    quiz_box.classList.add("activeQuiz"); //แสดงหน้าคำถาม
-    showQuetions(0); //เรียกฟังก์ชั่น showQestions
-    queCounter(1); //ส่งค่า 1 ไปที่ queCounter
-    startTimer(120); //เรียกฟังก์ชั่น startTimer
-    startTimerLine(0); //เรียกฟังก์ชั่น startTimerLine
-}
+        // คำสั่ง ปุ่มข้อต่อไป
+        continue_btn.onclick = () => {
+            info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจงก่อนสอบ
+            quiz_box.classList.add("activeQuiz"); //แสดงหน้าคำถาม
+            showQuetions(0); //เรียกฟังก์ชั่น showQestions
+            queCounter(1); //ส่งค่า 1 ไปที่ queCounter
+            startTimer(120); //เรียกฟังก์ชั่น startTimer
+            startTimerLine(0); //เรียกฟังก์ชั่น startTimerLine
+        }
 
-let timeValue =  120;
-let que_count = 0;
-let que_numb = 1;
-let userScore = 0;
-let counter;
-let counterLine;
-let widthValue = 0;
+        let timeValue = 120;
+        let que_count = 0;
+        let que_numb = 1;
+        let userScore = 0;
+        let counter;
+        let counterLine;
+        let widthValue = 0;
 
-const restart_quiz = result_box.querySelector(".buttons .restart");
-const quit_quiz = result_box.querySelector(".buttons .quit");
+        const restart_quiz = result_box.querySelector(".buttons .restart");
+        const quit_quiz = result_box.querySelector(".buttons .quit");
 
-// คำสั่ง ปุ่มเริ่มสอบใหม่
-restart_quiz.onclick = ()=>{
-    quiz_box.classList.add("activeQuiz"); //แสดงหน้าคำถาม
-    result_box.classList.remove("activeResult"); //ซ่อนหน้ารายงานผลสอบ
-    timeValue = 120; 
-    que_count = 0;
-    que_numb = 1;
-    userScore = 0;
-    widthValue = 0;
-    showQuetions(que_count); //เรียกฟังก์ชั่น showQestions
-    queCounter(que_numb); //ส่งค่า que_numb ไปที่ queCounter
-    clearInterval(counter); //เคลียร์ counter
-    clearInterval(counterLine); //เคลียร์ counterLine
-    startTimer(timeValue); //เรียกฟังก์ชั่น startTimer
-    startTimerLine(widthValue); //เรียกฟังก์ชั่น startTimerLine
-    timeText.textContent = "เหลือเวลา"; //แสดงข้อความ เวลาที่เหลือ
-    next_btn.classList.remove("show"); //ซ่อนปุ่ม ข้อถัดไป
-}
+        // คำสั่ง ปุ่มเริ่มสอบใหม่
+        restart_quiz.onclick = () => {
+            quiz_box.classList.add("activeQuiz"); //แสดงหน้าคำถาม
+            result_box.classList.remove("activeResult"); //ซ่อนหน้ารายงานผลสอบ
+            timeValue = 120;
+            que_count = 0;
+            que_numb = 1;
+            userScore = 0;
+            widthValue = 0;
+            showQuetions(que_count); //เรียกฟังก์ชั่น showQestions
+            queCounter(que_numb); //ส่งค่า que_numb ไปที่ queCounter
+            clearInterval(counter); //เคลียร์ counter
+            clearInterval(counterLine); //เคลียร์ counterLine
+            startTimer(timeValue); //เรียกฟังก์ชั่น startTimer
+            startTimerLine(widthValue); //เรียกฟังก์ชั่น startTimerLine
+            timeText.textContent = "เหลือเวลา"; //แสดงข้อความ เวลาที่เหลือ
+            next_btn.classList.remove("show"); //ซ่อนปุ่ม ข้อถัดไป
+        }
 
-// คำสั่ง ปุ่มออกจากการสอบ
-quit_quiz.onclick = ()=>{
-    window.open("https://script.google.com/macros/s/AKfycbxwnA2RCd5vyWhT7UH4l2-zCw4Y8u1P6BP854eua1p4icnioniEXPRj0JjiX0ZeoSam/exec",'_top');
-}
+        // คำสั่ง ปุ่มออกจากการสอบ
+        quit_quiz.onclick = () => {
+            window.open("https://script.google.com/macros/s/AKfycbzqZNzOiILdAA35IV1p6IpGEZkpxuvZ1Ls1zkWIElaz6er9W4lO43DmbgEkbQXffKpp/exec", '_top');
+        }
 
-const next_btn = document.querySelector("footer .next_btn");
-const bottom_ques_counter = document.querySelector("footer .total_que");
+        const next_btn = document.querySelector("footer .next_btn");
+        const bottom_ques_counter = document.querySelector("footer .total_que");
 
-// คำสั่ง ปุ่ม ข้อถัดไป
-next_btn.onclick = ()=>{
-    if(que_count < questions.length - 1){ //ถ้าจำนวนคำถาม น้อยกว่าคำถามทั้งหมด
-        que_count++; //เพิ่มจำนวนนับ
-        que_numb++; //เพิ่มค่า que_numb
-        showQuetions(que_count); //เรียกฟังก์ชั่น showQestions
-        queCounter(que_numb); //ส่งค่า que_numb ไปให้ queCounter
-        clearInterval(counter); //เคลียร์ counter
-        clearInterval(counterLine); //เคลียร์ counterLine
-        startTimer(timeValue); //เรียกฟังก์ชั่น startTimer
-        startTimerLine(widthValue); //เรียกฟังก์ชั่น startTimerLine
-        timeText.textContent = "เหลือเวลา"; //แสดงข้อความ เวลาที่เหลือ
-        next_btn.classList.remove("show"); //ซ่อนปุ่ม ข้อต่อไป
-    }else{
-        clearInterval(counter); //เคลียร์ counter
-        clearInterval(counterLine); //เคลียร์ counterLine
-        showResult(); //เรียกฟังก์ชั่น  showResult
-    }
-}
-
-// ดึงคำถาม และตัวเลือกตอบจากอะเรย์
-function showQuetions(main){
-    const que_text = document.querySelector(".que_text");
-
-    //แสดงคำถามและตัวเลือก
-    let que_tag = '<span>'+ questions[main].numb + ". " + questions[main].question +'</span>';
-    let option_tag = '<div class="option"><span>'+ questions[main].options[0] +'</span></div>'
-    + '<div class="option"><span>'+ questions[main].options[1] +'</span></div>'
-    + '<div class="option"><span>'+ questions[main].options[2] +'</span></div>'
-    + '<div class="option"><span>'+ questions[main].options[3] +'</span></div>';
-    que_text.innerHTML = que_tag;
-    option_list.innerHTML = option_tag;
-    
-    const option = option_list.querySelectorAll(".option");
-
-    // กำหนด onclick ให้กับตัวเลือก
-    for(i=0; i < option.length; i++){
-        option[i].setAttribute("onclick", "optionSelected(this)");
-    }
-}
-// ใส่ไอคอน
-let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
-let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
-
-//ถ้าผู้สอบ คลิกตอบ
-function optionSelected(answer){
-    clearInterval(counter); //เคลียร์ counter
-    clearInterval(counterLine); //เคลียร์ counterLine
-    let userAns = answer.textContent; //เก็บค่าที่ผู้สอบเลือก
-    let correcAns = questions[que_count].answer; //ดึงคำตอบที่ถูกต้องจากอะเรย์
-    const allOptions = option_list.children.length;
-    
-    if(userAns == correcAns){ //ถ้าเลือกตรงกับคำตอบที่เฉลย
-        userScore += 1; //เพิ่มคะแนนให้ 1 คะแนน
-        answer.classList.add("correct"); //แสดงแถบสีเขียว
-        answer.insertAdjacentHTML("beforeend", tickIconTag); //แสดงเครื่องหมายถูก
-        console.log("Correct Answer");
-        console.log("Your correct answers = " + userScore);
-    }else{
-        answer.classList.add("incorrect"); //แสดงแถบสีแดง
-        answer.insertAdjacentHTML("beforeend", crossIconTag); //แสดงเครื่องหมายผิด
-        console.log("Wrong Answer");
-
-        for(i=0; i < allOptions; i++){
-            if(option_list.children[i].textContent == correcAns){ //ถ้าคำตอบที่เลือกตรงกับที่เฉลย 
-                option_list.children[i].setAttribute("class", "option correct"); //ใส่แถบสีเขียวไปที่ตัวเลือกนั้น
-                option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); //ใส่เครื่องหมายถูกไปที่ตัวเลือกนั้น
-                console.log("Auto selected correct answer.");
+        // คำสั่ง ปุ่ม ข้อถัดไป
+        next_btn.onclick = () => {
+            if (que_count < questions.length - 1) { //ถ้าจำนวนคำถาม น้อยกว่าคำถามทั้งหมด
+                que_count++; //เพิ่มจำนวนนับ
+                que_numb++; //เพิ่มค่า que_numb
+                showQuetions(que_count); //เรียกฟังก์ชั่น showQestions
+                queCounter(que_numb); //ส่งค่า que_numb ไปให้ queCounter
+                clearInterval(counter); //เคลียร์ counter
+                clearInterval(counterLine); //เคลียร์ counterLine
+                startTimer(timeValue); //เรียกฟังก์ชั่น startTimer
+                startTimerLine(widthValue); //เรียกฟังก์ชั่น startTimerLine
+                timeText.textContent = "เหลือเวลา"; //แสดงข้อความ เวลาที่เหลือ
+                next_btn.classList.remove("show"); //ซ่อนปุ่ม ข้อต่อไป
+            } else {
+                clearInterval(counter); //เคลียร์ counter
+                clearInterval(counterLine); //เคลียร์ counterLine
+                showResult(); //เรียกฟังก์ชั่น  showResult
             }
         }
+
+        // ดึงคำถาม และตัวเลือกตอบจากอะเรย์
+        function showQuetions(main) {
+  const que_text = document.querySelector(".que_text");
+
+  let que_tag = "";
+  // ถ้า property question เป็น URL (ขึ้นต้นด้วย http)
+  if (questions[main].question.startsWith("http")) {
+    let imageUrl = questions[main].question;
+    // ตรวจสอบว่า URL นี้มาจาก Google Drive หรือไม่
+    if (imageUrl.includes("drive.google.com")) {
+      // ตัวอย่าง URL: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+      // ใช้ regex เพื่อดึง FILE_ID
+      let match = imageUrl.match(/\/d\/([^\/]+)/);
+      if (match && match[1]) {
+        let fileId = match[1];
+        // แปลงเป็น direct link
+        imageUrl = "https://lh5.googleusercontent.com/d/" + fileId;
+      }
     }
-    for(i=0; i < allOptions; i++){
-        option_list.children[i].classList.add("disabled"); //กำหนดให้คลิกตอบได้ครั้งเดียว
-    }
-    next_btn.classList.add("show"); //แสดงปุ่ม ข้อถัดไป
+    // สร้าง tag ให้แสดงรูปภาพ
+    que_tag = '<img src="' + imageUrl + '" alt="Question Image" style="max-width:100%;">';
+  } else {
+    // ถ้าไม่ใช่ URL ให้แสดงข้อความคำถามตามปกติ
+    que_tag = '<span>' + questions[main].numb + ". " + questions[main].question + '</span>';
+  }
+  
+  // สร้างตัวเลือกคำตอบ
+  let option_tag = '<div class="option"><span>' + questions[main].options[0] + '</span></div>'
+    + '<div class="option"><span>' + questions[main].options[1] + '</span></div>'
+    + '<div class="option"><span>' + questions[main].options[2] + '</span></div>'
+    + '<div class="option"><span>' + questions[main].options[3] + '</span></div>';
+  
+  // นำ HTML ที่สร้างไปแสดงใน container ที่เลือกไว้
+  que_text.innerHTML = que_tag;
+  option_list.innerHTML = option_tag;
+
+  // กำหนด onclick ให้กับตัวเลือกแต่ละอัน
+  const option = option_list.querySelectorAll(".option");
+  for (let i = 0; i < option.length; i++) {
+    option[i].setAttribute("onclick", "optionSelected(this)");
+  }
 }
 
-function showResult(){
-    info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจง
-    quiz_box.classList.remove("activeQuiz"); //ซ่อนหน้าคำถาม
-    result_box.classList.add("activeResult"); //แสดงหน้ารายงานผลการสอบ
-    const scoreText = result_box.querySelector(".score_text");
-    if (userScore > 3){ // ถ้าทำคะแนนได้มากกว่า 3
-        //แสดงข้อความ
-        let scoreTag = '<span>ยอดเยี่ยม! 🎉 คุณทำได้ <p>'+ userScore +'</p>/<p>'+ questions.length +' คะแนน</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
-    else if(userScore > 1){ // ถ้าทำคะแนนสอบได้มากกว่า 1
-        let scoreTag = '<span>เก่งมาก 😎 คุณทำได้ <p>'+ userScore +'</p>/<p>'+ questions.length +' คะแนน</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
-    else{ // ถ้าทำคะแนนสอบได้ 0
-        let scoreTag = '<span>เสียใจด้วย 😐 คุณทำได้ <p>'+ userScore +'</p>/<p>'+ questions.length +' คะแนน</p></span>';
-        scoreText.innerHTML = scoreTag;
-    }
-}
 
-function startTimer(time){
-    counter = setInterval(timer, 1000);
-    function timer(){
-        timeCount.textContent = time;
-        time--; 
-        if(time < 9){ 
-            let addZero = timeCount.textContent; 
-            timeCount.textContent = "0" + addZero;
-        }
-        if(time < 0){
+        // ใส่ไอคอน
+        let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
+        let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
+
+        //ถ้าผู้สอบ คลิกตอบ
+        function optionSelected(answer) {
             clearInterval(counter); //เคลียร์ counter
-            timeText.textContent = "หมดเวลา"; //หมดเวลาแล้ว
-            const allOptions = option_list.children.length; //ดึงทุกค่าจากตัวเลือก
-            let correcAns = questions[que_count].answer; //ดึงเฉลยจากอะเรย์
-            for(i=0; i < allOptions; i++){
-                if(option_list.children[i].textContent == correcAns){ //ถ้าตอบตรงกับเฉลย
-                    option_list.children[i].setAttribute("class", "option correct"); //แสดงแถบสีเขียวที่ตัวเลือกนั้น
-                    option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); //แสดงเครื่องหมายถูก
-                    console.log("Time Off: Auto selected correct answer.");
+            clearInterval(counterLine); //เคลียร์ counterLine
+            let userAns = answer.textContent; //เก็บค่าที่ผู้สอบเลือก
+            let correcAns = questions[que_count].answer; //ดึงคำตอบที่ถูกต้องจากอะเรย์
+            const allOptions = option_list.children.length;
+
+            if (userAns == correcAns) { //ถ้าเลือกตรงกับคำตอบที่เฉลย
+                userScore += 1; //เพิ่มคะแนนให้ 1 คะแนน
+                answer.classList.add("correct"); //แสดงแถบสีเขียว
+                answer.insertAdjacentHTML("beforeend", tickIconTag); //แสดงเครื่องหมายถูก
+                console.log("Correct Answer");
+                console.log("Your correct answers = " + userScore);
+            } else {
+                answer.classList.add("incorrect"); //แสดงแถบสีแดง
+                answer.insertAdjacentHTML("beforeend", crossIconTag); //แสดงเครื่องหมายผิด
+                console.log("Wrong Answer");
+
+                for (i = 0; i < allOptions; i++) {
+                    if (option_list.children[i].textContent == correcAns) { //ถ้าคำตอบที่เลือกตรงกับที่เฉลย 
+                        option_list.children[i].setAttribute("class", "option correct"); //ใส่แถบสีเขียวไปที่ตัวเลือกนั้น
+                        option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); //ใส่เครื่องหมายถูกไปที่ตัวเลือกนั้น
+                        console.log("Auto selected correct answer.");
+                    }
                 }
             }
-            for(i=0; i < allOptions; i++){
-                option_list.children[i].classList.add("disabled"); //กำหนดให้คลิกตอบได้เพียงครั้งเดียว
+            for (i = 0; i < allOptions; i++) {
+                option_list.children[i].classList.add("disabled"); //กำหนดให้คลิกตอบได้ครั้งเดียว
             }
             next_btn.classList.add("show"); //แสดงปุ่ม ข้อถัดไป
         }
-    }
-}
 
-function startTimerLine(time){
-    counterLine = setInterval(timer, 220);
-    function timer(){
-        time += 1; //เพิ่มค่าวลาทีละ 1
-        time_line.style.width = time + "px"; //เพิ่มขนาดความกว้างของเส้นเวลา
-        if(time > 549){ //ถ้าค่าเวลาเพิ่มขึ้นมากกว่า 549
-            clearInterval(counterLine); //เเคลียร์ counterLine
+        function showResult() {
+            info_box.classList.remove("activeInfo"); //ซ่อนหน้าคำชี้แจง
+            quiz_box.classList.remove("activeQuiz"); //ซ่อนหน้าคำถาม
+            result_box.classList.add("activeResult"); //แสดงหน้ารายงานผลการสอบ
+            const scoreText = result_box.querySelector(".score_text");
+            if (userScore > 3) { // ถ้าทำคะแนนได้มากกว่า 3
+                //แสดงข้อความ
+                let scoreTag = '<span>ยอดเยี่ยม! 🎉 น้องทำได้ <p>' + userScore + '</p>/<p>' + questions.length + ' คะแนน</p></span>';
+                scoreText.innerHTML = scoreTag;
+            }
+            else if (userScore > 1) { // ถ้าทำคะแนนสอบได้มากกว่า 1
+                let scoreTag = '<span>เก่งมาก 😎 น้องทำได้ <p>' + userScore + '</p>/<p>' + questions.length + ' คะแนน</p></span>';
+                scoreText.innerHTML = scoreTag;
+            }
+            else { // ถ้าทำคะแนนสอบได้ 0
+                let scoreTag = '<span>เสียใจด้วย 😐 น้องทำได้ <p>' + userScore + '</p>/<p>' + questions.length + ' คะแนน</p></span>';
+                scoreText.innerHTML = scoreTag;
+            }
         }
-    }
-}
 
-function queCounter(main){
-    //แสดงข้อที่ / จำนวนทั้งหมด
-    let totalQueCounTag = '<span><p>ข้อที่ '+ main +'</p> / <p>'+ questions.length +'</p></span>';
-    bottom_ques_counter.innerHTML = totalQueCounTag;
-}
-  </script>
+        function startTimer(time) {
+            counter = setInterval(timer, 1000);
+            function timer() {
+                timeCount.textContent = time;
+                time--;
+                if (time < 9) {
+                    let addZero = timeCount.textContent;
+                    timeCount.textContent = "0" + addZero;
+                }
+                if (time < 0) {
+                    clearInterval(counter); //เคลียร์ counter
+                    timeText.textContent = "หมดเวลา"; //หมดเวลาแล้ว
+                    const allOptions = option_list.children.length; //ดึงทุกค่าจากตัวเลือก
+                    let correcAns = questions[que_count].answer; //ดึงเฉลยจากอะเรย์
+                    for (i = 0; i < allOptions; i++) {
+                        if (option_list.children[i].textContent == correcAns) { //ถ้าตอบตรงกับเฉลย
+                            option_list.children[i].setAttribute("class", "option correct"); //แสดงแถบสีเขียวที่ตัวเลือกนั้น
+                            option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag); //แสดงเครื่องหมายถูก
+                            console.log("Time Off: Auto selected correct answer.");
+                        }
+                    }
+                    for (i = 0; i < allOptions; i++) {
+                        option_list.children[i].classList.add("disabled"); //กำหนดให้คลิกตอบได้เพียงครั้งเดียว
+                    }
+                    next_btn.classList.add("show"); //แสดงปุ่ม ข้อถัดไป
+                }
+            }
+        }
+
+        function startTimerLine(time) {
+            counterLine = setInterval(timer, 220);
+            function timer() {
+                time += 1; //เพิ่มค่าวลาทีละ 1
+                time_line.style.width = time + "px"; //เพิ่มขนาดความกว้างของเส้นเวลา
+                if (time > 549) { //ถ้าค่าเวลาเพิ่มขึ้นมากกว่า 549
+                    clearInterval(counterLine); //เเคลียร์ counterLine
+                }
+            }
+        }
+
+        function queCounter(main) {
+            //แสดงข้อที่ / จำนวนทั้งหมด
+            let totalQueCounTag = '<span><p>ข้อที่ ' + main + '</p> / <p>' + questions.length + '</p></span>';
+            bottom_ques_counter.innerHTML = totalQueCounTag;
+        }
+    </script>
 </body>
 
 </html>
