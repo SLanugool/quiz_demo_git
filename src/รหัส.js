@@ -7,7 +7,9 @@ function include(filename) {
  * @return {HtmlOutput} The HTML content of the login page.
  */
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile('index.html');
+  return HtmlService.createTemplateFromFile('index').evaluate()
+  .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+  .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
 }
 
 /**
@@ -57,26 +59,21 @@ function getLoginPage() {
   return HtmlService.createHtmlOutputFromFile('index').getContent();
 }
 
-/**
- * Registers a new user by adding their credentials to the spreadsheet.
- * Throws an error if the user already exists.
- * @param {string} email - The new user's email.
- * @param {string} password - The new user's password.
- */
-function registerNewUser(email, password) {
-  // Open the spreadsheet using its ID
-  const ss = SpreadsheetApp.openById('1-lAs2-ly3e4HtTrM_XNjSGnT8s2AiFHyFcSkm-JTAlE');
-  // Access the specific sheet where credentials are stored
-  const sheet = ss.getSheetByName('userlogin');
-  // Retrieve all data from the sheet
-  const data = sheet.getDataRange().getValues();
+/**ผู้ใช้ลงทะเบียนใหม่*/ 
 
-  // Check if the email already exists in the spreadsheet
-  for (let i = 0; i < data.length; i++) {
-    if (data[i][0] == email) {
-      throw new Error('User already exists');
-    }
-  }
-  // Append the new user's email and password to the spreadsheet
-  sheet.appendRow([email, password]);
+function registerNewUser(obj){
+  var ss = SpreadsheetApp.openById('1-lAs2-ly3e4HtTrM_XNjSGnT8s2AiFHyFcSkm-JTAlE').getSheetByName('userlogin')
+  var header = ss.getRange(1,1,1,ss.getLastColumn()).getValues()[0]
+  var row = []
+  Object.keys(obj).forEach(key=>{
+    row[header.indexOf(key)] = obj[key]
+  })
+  ss.appendRow(row)
+  return true
 }
+
+
+
+
+
+
