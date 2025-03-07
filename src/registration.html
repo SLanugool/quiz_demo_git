@@ -18,7 +18,8 @@
     body {
       /* background-image: linear-gradient(to right bottom, #072c65, #4d307b, #872a83, #be197b, #eb1265); */
       padding: 0 10px;
-      background: color #f8f8f8;;
+      background: color #f8f8f8;
+      ;
     }
 
     .logo {
@@ -30,6 +31,7 @@
       width: 100%;
       margin-bottom: 40px;
     }
+
     .logo__2 {
       background-image: url(' https://i0.wp.com/www.webythebrain.com/wp-content/uploads/2025/02/WE-Logo.png ');
       background-size: contain;
@@ -135,7 +137,7 @@
       /* border: 1px solid #159AF9; */
       border-radius: 4px;
       border-bottom-color: #06c;
-    box-shadow: 0 0 5px rgba(0, 80, 80, .4);
+      box-shadow: 0 0 5px rgba(0, 80, 80, .4);
 
     }
 
@@ -212,24 +214,28 @@
     .wrapper .form .inputfield:last-child {
       margin-bottom: 0;
     }
+
     .company__info {
-    width: 60%;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    padding-right: 40px;
-  }
-  @media screen and (min-width:499px){
-    .logo__2{
-      display: none;
-    }
-    .wrapper{
-      margin-top: 50px;
+      width: 60%;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      padding-right: 40px;
     }
 
-  }
+    @media screen and (min-width:499px) {
+      .logo__2 {
+        display: none;
+      }
+
+      .wrapper {
+        margin-top: 50px;
+      }
+
+    }
+
     @media screen and (max-width:499px) {
       .wrapper .form .inputfield {
         flex-direction: column;
@@ -243,15 +249,16 @@
       .wrapper .form .inputfield.terms {
         flex-direction: row;
       }
-      .company__info{
+
+      .company__info {
         display: none;
       }
-      .btn{
+
+      .btn {
         width: 100%;
       }
-    
+
     }
-    
   </style>
 </head>
 
@@ -259,100 +266,103 @@
   <div class="logo__2" style="margin-top: 50px;"></div>
   <div class="wrapper">
     <div class="company__info">
-       <div class="logo"></div>
-       <div class="title"><h3>ลงทะเบียน</h3></div>
+      <div class="logo"></div>
+      <div class="title">
+        <h3>ลงทะเบียน</h3>
+      </div>
     </div>
     <div class="logo" style="display: none;"></div>
-<form class="form" id="myForm" onsubmit="submitForm(event)">
-  <div class="inputfield">
-    <input type="email" placeholder="Email" class="input" id="email" name="user_name"required>
-  </div>
-  <div class="inputfield">
-    <input type="password" placeholder="Password" class="input" id="passWord" name="passWord"required>
-  </div>
-  <div class="inputfield">
-    <input type="text" placeholder="ชื่อ" class="input" id="name" name="name"required>
-  </div>
-  <div class="inputfield">
-    <input type="text" placeholder="นามสกุล" class="input" id="lastName" name="lastName"required>
-  </div>
-  <div class="inputfield">
-    <input type="tel" placeholder="เบอร์โทรศัพท์" class="input" id="phone" name="phone" pattern="^0[689]\d{8}$"required>
-  </div>
-  <div class="inputfield terms">
+    <form class="form" id="myForm" onsubmit="submitForm(event)">
+      <div class="inputfield">
+        <input type="email" placeholder="Email" class="input" id="email" name="user_name" required>
+      </div>
+      <div class="inputfield">
+        <input type="password" placeholder="Password" class="input" id="passWord" name="passWord" required>
+      </div>
+      <div class="inputfield">
+        <input type="text" placeholder="ชื่อ" class="input" id="name" name="name" required>
+      </div>
+      <div class="inputfield">
+        <input type="text" placeholder="นามสกุล" class="input" id="lastName" name="lastName" required>
+      </div>
+      <div class="inputfield">
+        <input type="tel" placeholder="เบอร์โทรศัพท์" class="input" id="phone" name="phone" pattern="^0[689]\d{8}$"
+          required>
+      </div>
+      <div class="inputfield terms">
         <label class="check">
-            <input type="checkbox">
-            <span class="checkmark"></span>
-          </label>
+          <input type="checkbox">
+          <span class="checkmark"></span>
+        </label>
         <p>
           <a href="https://www.webythebrain.com/privacy-notice" style="text-decoration: none;">
             ยอมรับข้อกำหนดและเงื่อนไข
           </a>
         </p>
       </div>
-  <div class="inputfield">
-    <input type="submit" value="ลงทะเบียน" class="btn">
-  </div>
-  <div style="text-align:center; font-size: x-small;">
-            <p>เคยลงทะเบียนแล้ว? <a href="#" onclick="loadLogin()"> เข้าสู่ระบบ</a></p>
-  </div>
-</form>
+      <div class="inputfield">
+        <input type="submit" value="ลงทะเบียน" class="btn">
+      </div>
+      <div style="text-align:center; font-size: x-small;">
+        <p>เคยลงทะเบียนแล้ว? <a href="#" onclick="loadLogin()"> เข้าสู่ระบบ</a></p>
+      </div>
+    </form>
 
-<script>
-  function submitForm(event) {
-    event.preventDefault(); // ป้องกันการ submit แบบปกติ
+    <script>
+      function submitForm(event) {
+        event.preventDefault(); // ป้องกันการ submit แบบปกติ
 
-    // ตรวจสอบข้อมูลในแต่ละฟิลด์
-    var email = document.getElementById('email').value.trim();
-    var passWord = document.getElementById('passWord').value.trim();
-    var name = document.getElementById('name').value.trim();
-    var lastName = document.getElementById('lastName').value.trim();
-    var phone = document.getElementById('phone').value.trim();
+        // ตรวจสอบข้อมูลในแต่ละฟิลด์
+        var email = document.getElementById('email').value.trim();
+        var passWord = document.getElementById('passWord').value.trim();
+        var name = document.getElementById('name').value.trim();
+        var lastName = document.getElementById('lastName').value.trim();
+        var phone = document.getElementById('phone').value.trim();
 
-    // ถ้าใดๆ ว่างเปล่า ให้แสดง alert แล้วหยุดการทำงาน
-    if (!email || !passWord || !name || !lastName || !phone) {
-      Swal.fire({
-        icon: 'error',
-        title: 'กรอกข้อมูลไม่ครบ',
-        text: 'กรุณากรอกข้อมูลให้ครบทุกช่อง',
-        confirmButtonText: 'OK'
-      });
-      return; // หยุดการดำเนินการต่อ
-    }
+        // ถ้าใดๆ ว่างเปล่า ให้แสดง alert แล้วหยุดการทำงาน
+        if (!email || !passWord || !name || !lastName || !phone) {
+          Swal.fire({
+            icon: 'error',
+            title: 'กรอกข้อมูลไม่ครบ',
+            text: 'กรุณากรอกข้อมูลให้ครบทุกช่อง',
+            confirmButtonText: 'OK'
+          });
+          return; // หยุดการดำเนินการต่อ
+        }
 
-    // ถ้าข้อมูลครบแล้ว ให้สร้างอ็อบเจ็กต์สำหรับส่งข้อมูล
-    var obj = {};
-    var formData = $('#myForm').serializeArray();
-    formData.forEach(el => obj[el.name] = el.value);
+        // ถ้าข้อมูลครบแล้ว ให้สร้างอ็อบเจ็กต์สำหรับส่งข้อมูล
+        var obj = {};
+        var formData = $('#myForm').serializeArray();
+        formData.forEach(el => obj[el.name] = el.value);
 
-    // ส่งข้อมูลไปยังฟังก์ชัน registerNewUser ที่ฝั่ง server
-    google.script.run.withSuccessHandler(() => {
-      loadLogin();
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'บันทึกเรียบร้อยแล้ว',
-        showConfirmButton: false,
-        timer: 1500
-      });
-    }).registerNewUser(obj);
-  }
+        // ส่งข้อมูลไปยังฟังก์ชัน registerNewUser ที่ฝั่ง server
+        google.script.run.withSuccessHandler(() => {
+          loadLogin();
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'บันทึกเรียบร้อยแล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }).registerNewUser(obj);
+      }
 
-  function loadLogin() {
-    google.script.run.withSuccessHandler(function(html) {
-      document.open();
-      document.write(html);
-      document.close();
-    }).getLoginPage();
-  }
-</script>
+      function loadLogin() {
+        google.script.run.withSuccessHandler(function (html) {
+          document.open();
+          document.write(html);
+          document.close();
+        }).getLoginPage();
+      }
+    </script>
 
-<!-- เรียกใช้ jQuery และ SweetAlert -->
-<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- เรียกใช้ jQuery และ SweetAlert -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</div>
 
-  
 </body>
 
 </html>
